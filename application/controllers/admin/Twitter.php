@@ -15,6 +15,7 @@ class Twitter extends CI_Controller {
         parent::__construct();
         $this->load->library('session');
         $this->load->library('form_validation');
+        $this->load->helper('data_helper');
         $this->load->model('Tw_model','twmodel');
          if (!$this->session->userdata('is_admin_login')) {
             redirect('admin/home');
@@ -94,6 +95,7 @@ class Twitter extends CI_Controller {
         $arr['acct'] = $this->twmodel->get_acct($id);
         $arr['stat'] = $this->twmodel->get_current_stat($id);
         $arr['month'] = $this->twmodel->get_month_stats($id);
+        $arr['sched'] = $this->twmodel->get_schedule($id);
         
        
         

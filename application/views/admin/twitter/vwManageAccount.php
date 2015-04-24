@@ -1,11 +1,6 @@
 <?php
 $this->load->view('admin/vwHeader');
 ?>
-<!--  
-Load Page Specific CSS and JS here
-Author : Abhishek R. Kaushik 
-Downloaded from http://devzone.co.in
--->
 <link href="<?php echo HTTP_CSS_PATH; ?>starter-template.css" rel="stylesheet">
 <style>
     .panel{
@@ -14,7 +9,12 @@ Downloaded from http://devzone.co.in
         width: 500px;
         height: 303px;
     }
-
+    .wide-panel{
+        margin-left: 55px;
+        float: left;
+        width: 1050px;
+        height: 303px;
+    }
 </style>
 
 <script type="text/javascript" src="https://www.google.com/jsapi"></script>
@@ -74,18 +74,22 @@ Downloaded from http://devzone.co.in
     google.setOnLoadCallback(drawChart);
     function drawChart() {
         var data = google.visualization.arrayToDataTable([
-            ['Week', 'Followers', 'Clicks'],
+            ['Week', 'Followers', 'Clicks', 'Tweets'],
         <?php 
         foreach ($month as $st) {    
         $week = date( "m/d", strtotime($st['date']) );
-        $array[] = "['". $week ."', ". $st['followers'] .", ". $st['clicks'] ."]";
+        $array[] = "['". $week ."', ". $st['followers'] .", ". $st['clicks'] .", ". $st['tweets'] ."]";
         }
         echo implode (", ", $array);
         ?>    
         ]);
 
         var options = {
-            title: 'Account Performance'
+            title: 'Account Performance',
+            curveType: 'function',
+            legend: { position: 'bottom' },
+            width: '480',
+            height: '200'
         };
 
         var chart = new google.visualization.LineChart(document.getElementById('line_graph'));
@@ -142,12 +146,11 @@ Downloaded from http://devzone.co.in
     </div>
     </div>
 
-    <div class="panel panel-success">
+    <div class="panel panel-warning">
         <!-- Default panel contents -->
-        <div class="panel-heading">Panel heading</div>
-        <div class="panel-body">
-            <div id="chart_div" style="width: 300px; height: 200px;"></div>
-
+        <div class="panel-heading">Account Operations</div>
+        <div class="panel-body">        
+            
         </div>
     </div>
 
@@ -160,31 +163,40 @@ Downloaded from http://devzone.co.in
         </div>    
     </div>
 
-    <div class="panel panel-warning">
+ <div class="wide-panel panel-default" >
         <!-- Default panel contents -->
-        <div class="panel-heading">Panel heading</div>
-        <div class="panel-body">
-            <div id="piechart12" style="width: 300px; height: 200px;"></div>
-        </div>
-    </div>
+        <div class="panel-heading">Scheduled Tweets <span style='float:right; margin-top: -7px;'><a href="<?php echo base_url('admin/twitter/add_acct'); ?>" class="btn btn-info">Add Task</a></span></div>
 
-    <div class="panel panel-info">
-        <!-- Default panel contents -->
-        <div class="panel-heading">Panel heading</div>
-        <div class="panel-body">
-            <p>Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi. Nam eget dui. Etiam rhoncus. Maecenas tempus, tellus eget condimentum rhoncus, sem quam semper libero, sit amet adipiscing sem neque sed ipsum. Nam quam nunc, blandit vel, luctus pulvinar, hendrerit id, lorem. Maecenas nec odio et ante tincidunt tempus. Donec vitae sapien ut libero venenatis faucibus. Nullam quis ante. Etiam sit amet orci eget eros faucibus tincidunt. Duis leo. Sed fringilla mauris sit amet nibh. Donec sodales sagittis magna. Sed consequat, leo eget bibendum sodales, augue velit cursus nunc, quis gravida magna mi a libero. Fusce vulputate eleifend sapien.</p>
+        <!-- Table -->
+        <table class="table table-striped table-hover">
+        <thead>
+        <tr>
+        <th>Interval</th>
+        <th>Description</th>
+        <th>Type</th>
+        <th>Count</th>
+        <th>Hash Tags</th>
+        <th>User Tags</th>
+        <th>Last Trigger</th>
+        </tr>
+        </thead>
+        <?php
+        foreach ($sched as $sc) {
+            echo "<tr>";
+            echo "<td>". secs_to_h($sc['interval']) ."</td>";
+            echo "<td>". $sc['title'] ."</td>";
+            echo "<td>". $sc['tweet_type'] ."</td>";
+            echo "<td>". $sc['count'] ."</td>";
+            echo "<td>". $sc['hashtags'] ."</td>";
+            echo "<td>". $sc['usertags'] ."</td>";
+            echo "<td>". $sc['last_trigger'] ."</td>";
+            echo "</tr>";
+        }
+        ?>
+        </table>
         </div>
-    </div>
+</div>
 
-    <div class="panel panel-default">
-        <!-- Default panel contents -->
-        <div class="panel-heading">Panel heading</div>
-        <div class="panel-body">
-            <p>Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi. Nam eget dui. Etiam rhoncus. Maecenas tempus, tellus eget condimentum rhoncus, sem quam semper libero, sit amet adipiscing sem neque sed ipsum. Nam quam nunc, blandit vel, luctus pulvinar, hendrerit id, lorem. Maecenas nec odio et ante tincidunt tempus. Donec vitae sapien ut libero venenatis faucibus. Nullam quis ante. Etiam sit amet orci eget eros faucibus tincidunt. Duis leo. Sed fringilla mauris sit amet nibh. Donec sodales sagittis magna. Sed consequat, leo eget bibendum sodales, augue velit cursus nunc, quis gravida magna mi a libero. Fusce vulputate eleifend sapien.</p>
-        </div>
-    </div>
-
-</div><!-- /.container -->
 <hr>
 <?php
 $this->load->view('admin/vwFooter');

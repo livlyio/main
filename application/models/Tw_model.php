@@ -81,7 +81,16 @@ class Tw_model extends CI_Model {
         return false;
     }
     
-    
+     function get_schedule($id)
+    {
+        $this->db->where('acct_id',$id);
+        $this->db->where('active','1');
+        $query = $this->db->get('twitter_scheduler');
+        if ($query->num_rows() > 0) {
+            return $query->result_array();
+        }        
+        return false;
+    }   
     
     function save_stat($alias, $realurl, $clientip, $hostname, $referer)
     {
