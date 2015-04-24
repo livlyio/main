@@ -1,4 +1,6 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
@@ -45,7 +47,7 @@ class Twitter extends CI_Controller {
         
         $arr['pages'] = $this->pagination->create_links();
         
-        $this->load->view('admin/vwManageTwitter',$arr);
+        $this->load->view('admin/twitter/vwManageAccounts',$arr);
     }
 
     public function doadd()
@@ -57,16 +59,16 @@ class Twitter extends CI_Controller {
         $arr['name'] = $this->input->post('name');
         $arr['cat'] = $this->input->post('cat');
         $arr['page'] = 'result';
-        $this->load->view('admin/vwAddTwitter',$arr);        
+        $this->load->view('admin/twitter/vwManageAccount',$arr);        
         
     }
 
-    public function add() {
+    public function add_account() {
         $arr['page'] = 'add';
-        $this->load->view('admin/vwAddTwitter',$arr);
+        $this->load->view('admin/twitter/vwAddAccount',$arr);
     }
 
-     public function edit_Twitter() {
+     public function edit_account() {
         $arr['page'] = 'Twitter';
         $this->load->view('admin/vwEditTwitter',$arr);
     }
@@ -79,7 +81,24 @@ class Twitter extends CI_Controller {
         // Code goes here
     }
     
-    
+    public function view_acct() {
+        
+        $arr['page'] = 'Twitter';
+        
+        $config['base_url'] = 'http://livly.io/admin/twitter/view_acct';
+
+        $id = $this->uri->segment('4');
+
+        
+        
+        $arr['acct'] = $this->twmodel->get_acct($id);
+        $arr['stat'] = $this->twmodel->get_current_stat($id);
+        $arr['month'] = $this->twmodel->get_month_stats($id);
+        
+       
+        
+        $this->load->view('admin/twitter/vwManageAccount',$arr);        
+    }
     
     
 

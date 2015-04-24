@@ -13,9 +13,9 @@ class Tw_model extends CI_Model {
         $this->load->helper('string');
     }
     
-    function list_links()
+    function list_accts()
     {
-        $query = $this->db->get('redirects');
+        $query = $this->db->get('twitter_accounts');
 
         if ($query->num_rows() > 0) {
             $result = $query->result_array(); 
@@ -25,14 +25,14 @@ class Tw_model extends CI_Model {
         
     }
     
-    function count_links(){
-        $query = $this->db->get('redirects');
+    function count_accts(){
+        $query = $this->db->get('twitter_accounts');
         return $query->num_rows();         
     }
     
-    function get_links($start,$stop)
+    function get_accts($start,$stop)
     {
-        $query = $this->db->get('redirects',$start,$stop);
+        $query = $this->db->get('twitter_accounts',$start,$stop);
 
         if ($query->num_rows() > 0) {
             $result = $query->result_array(); 
@@ -42,19 +42,46 @@ class Tw_model extends CI_Model {
         
     }
 
-    function get_url($alias)
+    function get_acct($id)
     {
-    
-        $this->db->select('url');
-
-        $query = $this->db->get_where('redirects', array('alias' => $alias), 1, 0);
+        $query = $this->db->get_where('twitter_accounts', array('acct_id' => $id), 1, 0);
 
         if ($query->num_rows() > 0) {
-            $row = $query->row(); 
-            return $row->url;
+            return $query->row_array();
         }
         return false;
     }
+        
+    function get_current_stat($id)
+    {
+        $this->db->select_max('stat_id');
+        $this->db->where('acct_id',$id);
+        $query = $this->db->get('twitter_stats');
+        if ($query->num_rows() > 0) {
+            $row = $query->row();
+            $sid = $row->stat_id;
+        } else { return false; }
+        
+        $this->db->where('stat_id',$sid);
+        $query = $this->db->get('twitter_stats');
+        if ($query->num_rows() > 0) {
+            return $query->row_array();
+        }        
+    }
+    
+    function get_month_stats($id)
+    {
+        $month = date('Y-m-d', strtotime('-30 days'));
+        $this->db->where('acct_id',$id);
+        $this->db->where('date >=',$month);
+        $query = $this->db->get('twitter_stats');
+        if ($query->num_rows() > 0) {
+            return $query->result_array();
+        }        
+        return false;
+    }
+    
+    
     
     function save_stat($alias, $realurl, $clientip, $hostname, $referer)
     {
@@ -63,7 +90,7 @@ class Tw_model extends CI_Model {
     
     function count_bycat($cat) {
         $this->db->where(array('category' => $cat));
-        $query = $this->db->get('redirects');
+        $query = $this->db->get('twitter_accounts');
         return $query->num_rows();  
     }
     
@@ -101,7 +128,7 @@ class Tw_model extends CI_Model {
     function does_alias_exist($alias)
     {
         $this->db->select('id');
-        $query = $this->db->get_where('redirects', array('alias' => $alias), 1, 0);
+        $query = $this->db->get_where('twitter_accounts', array('alias' => $alias), 1, 0);
         if ($query->num_rows() > 0) { return true; }
     
         return false;
@@ -137,7 +164,7 @@ $data = array(
 
 );
 
-$this->db->insert('redirects', $data);
+$this->db->insert('twitter_accounts', $data);
 
 }
 

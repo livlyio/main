@@ -21,7 +21,7 @@ $this->load->view('vwHeader');
         </div>
         <div class="col-lg-4">
           <h2>Targeted</h2>
-          <p>Livly is focused on results-driven programs.  Traffic is specifically targeted to maximize results while minimizing non-converting click-throughs. </p>
+          <p>Livly is focused on results-driven programs.  Traffic is specifically targeted to maximize results while minimizing non-converting click throughs. </p>
           <p><a class="btn btn-default" href="#">View details &raquo;</a></p>
        </div>
         <div class="col-lg-4">
