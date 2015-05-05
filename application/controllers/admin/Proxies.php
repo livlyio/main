@@ -57,29 +57,20 @@ class Twitter extends CI_Controller {
         $arr = $this->twmodel->get_acct($id);
         $arr['page'] = 'result';
         
-        redirect('admin/twitter');   
-    }
-    
-    public function doedit()
-    {  
-        $id = $this->uri->segment('4');
-        $this->twmodel->update_account($id,$this->input->post());
+        redirect('admin/twitter');
+       
+      //  $this->load->view('admin/twitter/vwAddAccount',$arr);        
         
-        redirect('admin/twitter/view_acct/'.$id);   
-    }    
+    }
 
     public function add_acct() {
         $arr['page'] = 'add';
         $this->load->view('admin/twitter/vwAddAccount',$arr);
     }
 
-     public function edit_acct() {   
-        $id = $this->uri->segment('4');     
-        
-        $arr = $this->twmodel->get_acct($id);
+     public function edit_account() {
         $arr['page'] = 'Twitter';
-        
-        $this->load->view('admin/twitter/vwEditAccount',$arr);
+        $this->load->view('admin/vwEditTwitter',$arr);
     }
     
      public function block_Twitter() {
@@ -96,9 +87,10 @@ class Twitter extends CI_Controller {
         
         $config['base_url'] = 'http://livly.io/admin/twitter/view_acct';
 
-        $id = $this->uri->segment('4');     
+        $id = $this->uri->segment('4');
+
         
-        $arr['opers'] = $this->twmodel->get_opers($id);
+        
         $arr['acct'] = $this->twmodel->get_acct($id);
         $arr['stat'] = $this->twmodel->get_current_stat($id);
         $arr['month'] = $this->twmodel->get_month_stats($id);

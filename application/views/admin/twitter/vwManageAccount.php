@@ -103,19 +103,77 @@ $this->load->view('admin/vwHeader');
 </div>
 <div class="container">
 
-    <div class="panel panel-success">
+    <div class="panel panel-success" style="height: auto;">
         <!-- Default panel contents -->
         <div class="panel-heading">Account Information</div>
         <div class="panel-body">
         <table class="table table-striped table-hover">
         <tr><td>Name:</td><td><?php echo $acct['name']; ?></td></tr>
         <tr><td>Username:</td><td><a href="http://www.twitter.com/<?php echo $acct['username']; ?>" target="_blank">@<?php echo $acct['username']; ?></a></td></tr>
+        <tr><td>Password:</td><td><?php echo $acct['password']; ?></td></tr>
         <tr><td>Sex:</td><td><?php echo $acct['sex']; ?></td></tr>
+        <tr><td>Race:</td><td><?php echo $acct['race']; ?></td></tr>
         <tr><td>Niche:</td><td><?php echo $acct['niche']; ?></td></tr>
         </table>    
         </div>
         </div>
 
+    <div class="panel panel-warning" style="height: auto;">
+        <!-- Default panel contents -->
+        <div class="panel-heading">Account Operations</div>
+        <div class="panel-body">        
+        <form method="post" action="admin/twitter/updateops">
+        <table class="table table-striped table-hover">
+        <tr><td>Auto Follow F/RT/M:</td><td><?php echo form_dropdown('autofollow',array('1' => 'Enabled','2' => 'Randomized','0' => 'Disabled'),$opers['autofollow']); ?></td></tr>
+        <tr><td>Auto Favorite RT/M:</td><td><?php echo form_dropdown('autofavorite',array('1' => 'Enabled','2' => 'Randomized','0' => 'Disabled'),$opers['autofavorite']); ?></td></tr>
+        <tr><td>Auto Thanks RT:</td><td><?php echo form_dropdown('autothanks',array('1' => 'Enabled','2' => 'Randomized','0' => 'Disabled'),$opers['autothanks']); ?></td></tr>
+        <tr><td>AI Replies:</td><td><?php echo form_dropdown('aireplies',array('1' => 'Enabled','2' => 'Randomized','0' => 'Disabled'),$opers['aireplies']); ?></td></tr>
+        <tr><td>Semantic Engine:</td><td><?php echo form_dropdown('autofavorite',array('1' => 'Flirty Personality','2' => 'Happy Personality','3' => 'Moderate Personality','4' => 'Randomized','0' => 'Disabled'),$opers['semengine']); ?></td></tr>
+        <tr><td>Response Time:</td><td><?php echo form_dropdown('responsetime',array('1' => '1-10 Minute Offset','2' => '10-30 Minute Offset','3' => '30-60 Minute Offset','4' => 'Randomized','0' => 'Immediate'),$opers['responsetime']); ?></td></tr>
+        <tr><td><input type="submit" class="btn btn-success" value="Update Operations" /></td><td></td></tr>
+        </table> 
+        </form>            
+        </div>
+    </div>
+
+ <div class="wide-panel panel-default" >
+        <!-- Default panel contents -->
+        <div class="panel-heading">Scheduled Tweets <span style='float:right; margin-top: -7px;'><a href="<?php echo base_url('admin/twitter/add_acct'); ?>" class="btn btn-info">Add Task</a></span></div>
+
+        <!-- Table -->
+        <table class="table table-striped table-hover">
+        <thead>
+        <tr>
+        <th>Interval</th>
+        <th>Description</th>
+        <th>Type</th>
+        <th>Count</th>
+        <th>Hash Tags</th>
+        <th>User Tags</th>
+        <th>Last Trigger</th>
+        </tr>
+        </thead>
+        <?php
+        if (is_array($sched)) {
+        foreach ($sched as $sc) {
+            echo "<tr>";
+            echo "<td>". secs_to_h($sc['interval']) ."</td>";
+            echo "<td>". $sc['title'] ."</td>";
+            echo "<td>". $sc['tweet_type'] ."</td>";
+            echo "<td>". $sc['count'] ."</td>";
+            echo "<td>". $sc['hashtags'] ."</td>";
+            echo "<td>". $sc['usertags'] ."</td>";
+            echo "<td>". $sc['last_trigger'] ."</td>";
+            echo "</tr>";
+        }
+        }
+        ?>
+        </table>
+        </div>
+
+
+
+    
         <div class="panel panel-info">
         <!-- Default panel contents -->
         <div class="panel-heading">Current Week Statistics</div>
@@ -146,14 +204,6 @@ $this->load->view('admin/vwHeader');
     </div>
     </div>
 
-    <div class="panel panel-warning">
-        <!-- Default panel contents -->
-        <div class="panel-heading">Account Operations</div>
-        <div class="panel-body">        
-            
-        </div>
-    </div>
-
     <div class="panel panel-danger">
         <!-- Default panel contents -->
         <div class="panel-heading">30-Day Statistics</div>
@@ -162,40 +212,7 @@ $this->load->view('admin/vwHeader');
 
         </div>    
     </div>
-
- <div class="wide-panel panel-default" >
-        <!-- Default panel contents -->
-        <div class="panel-heading">Scheduled Tweets <span style='float:right; margin-top: -7px;'><a href="<?php echo base_url('admin/twitter/add_acct'); ?>" class="btn btn-info">Add Task</a></span></div>
-
-        <!-- Table -->
-        <table class="table table-striped table-hover">
-        <thead>
-        <tr>
-        <th>Interval</th>
-        <th>Description</th>
-        <th>Type</th>
-        <th>Count</th>
-        <th>Hash Tags</th>
-        <th>User Tags</th>
-        <th>Last Trigger</th>
-        </tr>
-        </thead>
-        <?php
-        foreach ($sched as $sc) {
-            echo "<tr>";
-            echo "<td>". secs_to_h($sc['interval']) ."</td>";
-            echo "<td>". $sc['title'] ."</td>";
-            echo "<td>". $sc['tweet_type'] ."</td>";
-            echo "<td>". $sc['count'] ."</td>";
-            echo "<td>". $sc['hashtags'] ."</td>";
-            echo "<td>". $sc['usertags'] ."</td>";
-            echo "<td>". $sc['last_trigger'] ."</td>";
-            echo "</tr>";
-        }
-        ?>
-        </table>
-        </div>
-</div>
+    </div>
 
 <hr>
 <?php

@@ -12,9 +12,24 @@ class Tw_model extends CI_Model {
         parent::__construct();
         $this->load->helper('string');
     }
+
+    function save_new_account($data)
+    {
+        $this->db->insert('twitter_accounts', $data);
+
+        return $this->db->insert_id();
+    }
+
+    function update_account($id,$data)
+    {
+        $this->db->where('acct_id',$id);
+        $this->db->update('twitter_accounts', $data);
+        return true;
+    }
     
     function list_accts()
     {
+        $this->db->order_by("acct_id","desc");
         $query = $this->db->get('twitter_accounts');
 
         if ($query->num_rows() > 0) {
@@ -32,6 +47,7 @@ class Tw_model extends CI_Model {
     
     function get_accts($start,$stop)
     {
+        $this->db->order_by("acct_id","desc");
         $query = $this->db->get('twitter_accounts',$start,$stop);
 
         if ($query->num_rows() > 0) {
@@ -90,6 +106,24 @@ class Tw_model extends CI_Model {
             return $query->result_array();
         }        
         return false;
+    } 
+    
+    function get_opers($id)
+    {
+        $this->db->where('acct_id',$id);
+       // $this->db->where('active','1');
+        $query = $this->db->get('twitter_operations');
+        if ($query->num_rows() > 0) {
+            return $query->row_array();
+        }        
+        return false;
+    }  
+    
+    function update_opers($id,$data)
+    {
+        $this->db->where('acct_id',$id);
+        $query = $this->db->update('twitter_operations',$data);
+        return;    
     }   
     
     function save_stat($alias, $realurl, $clientip, $hostname, $referer)
@@ -104,24 +138,7 @@ class Tw_model extends CI_Model {
     }
     
     
-    function create($inurl, $name, $cat, $user)
-    {
-    $long_url = prep_url($inurl);
 
-    //$link_length = $this->config->item(‘link_length’);
-    $link_length = '3';
-
-    $alias = random_string('nozero', '1') . random_string('alnum', $link_length);
-
-    while ($this->does_alias_exist($alias))
-    {
-        $alias = random_string('nozero', '1') . random_string('alnum', $link_length);
-    }
-
-    $this->save_new_alias($long_url, $alias, $name, $cat, $user);
-
-    return base_url() . $alias;
-    }
 
 
 /**
@@ -143,39 +160,8 @@ class Tw_model extends CI_Model {
         return false;
     }
 
-/**
 
-* Save a new Alias to the table
 
-* @param type $url URL to shorten
-
-* @param type $alias  The new Alias for this URL
-
-*/
-
-function save_new_alias($url, $alias, $name, $cat, $user)
-
-{
-
-$data = array(
-
-'alias' => $alias,
-
-'url' => $url,
-
-'name' => $name,
-
-'category' => $cat,
-
-'user' => $user,
-
-'created' => date("Y-m-d H:i:s")
-
-);
-
-$this->db->insert('twitter_accounts', $data);
-
-}
 
 }
 

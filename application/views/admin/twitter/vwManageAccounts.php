@@ -22,11 +22,12 @@ $this->load->view('admin/vwHeader');
         <table class="table table-striped table-hover">
           <thead>
             <tr>
-              <th>#</th>
+              <th>ID#</th>
               <th>Name</th>
               <th>Niche</th>
               <th>Username</th>
               <th>Sex</th>
+              <th>Race</th>
               <th>Email</th>
               <th>Password</th>
               <th>Operations</th>
@@ -35,16 +36,17 @@ $this->load->view('admin/vwHeader');
           <tbody>
           <?php foreach ($list as $row) { ?>
             <tr>
-              <td><?php echo $row['acct_id']; ?></td>
+              <td><?php echo ($row['acct_id'] + 50); ?></td>
               <td><?php echo $row['name']; ?></td>
               <td><?php echo $row['niche']; ?></td>
               <td><a href="http://www.twitter.com/<?php echo $row['username']; ?>">@<?php echo $row['username']; ?></a></td>
               <td><?php echo $row['sex']; ?></td>
+              <td><?php echo $row['race']; ?></td>
               <td><?php echo $row['email']; ?></td>
               <td><?php echo $row['password']; ?></td>
               <td>
                   <a href="<?php echo base_url() . 'admin/twitter/view_acct/' . $row['acct_id']; ?>" title='View'> <i class="fam-zoom"></i></a>
-                 <a href='#' title='Edit'><i class="fam-user-edit"></i></a>
+                 <a href='<?php echo base_url() . 'admin/twitter/edit_acct/' . $row['acct_id']; ?>' title='Edit'><i class="fam-user-edit"></i></a>
                  <a href='#' title='Block'><i class="fam-user-gray"></i></a>
                  <a href='#' title='Delete'><i class="fam-user-delete"></i></a>
               </td>

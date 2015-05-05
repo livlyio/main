@@ -39,6 +39,7 @@
             <li <?php echo  $pg =='user' ? 'class="active"' : '' ?>><a href="<?php echo base_url(); ?>admin/users">Users</a></li>
             <li <?php echo  $pg =='links' ? 'class="active"' : '' ?>><a href="<?php echo base_url(); ?>admin/redirects">Links</a></li>
             <li <?php echo  $pg =='twitter' ? 'class="active"' : '' ?>><a href="<?php echo base_url(); ?>admin/twitter">Twitter</a></li>
+            <li <?php echo  $pg =='proxies' ? 'class="active"' : '' ?>><a href="<?php echo base_url(); ?>admin/proxies">Proxies</a></li>
             
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">My Account<b class="caret"></b></a>
